@@ -35,7 +35,8 @@ public class RangeUtil {
 	}
 
 	/**
-	 * Helper method to compare two lists of Range(s)
+	 * Helper method to compare two lists of Range(s).
+	 * Equality means the same values are in each range, as we iterate through.
 	 * 
 	 * @param list1
 	 * @param list2
@@ -43,25 +44,23 @@ public class RangeUtil {
 	 */
 	public static boolean compareLists(final List<Range> list1, final List<Range> list2) {
 
-		Comparator<Range> myComparator = new Comparator<Range>() {
-			@Override
-			public int compare(Range range1, Range range2) {
-				return (range1.isEqual(range2)) ? 0 : -1;
-			}
-		};
-
-		// iterate through the elements and compare them one by one using
-		// the provided comparator.
+		// We can bail early if the two lists aren't the same size
+		if (list1.size() != list2.size())
+			return false;
+		
+		// We'll iterate over both lists, comparing each item in sequence.
 		Iterator<Range> it1 = list1.iterator();
 		Iterator<Range> it2 = list2.iterator();
+
 		while (it1.hasNext()) {
 			Range t1 = it1.next();
 			Range t2 = it2.next();
-			if (myComparator.compare(t1, t2) != 0) {
+			if (!t1.isEqual(t2)) {
 				// as soon as a difference is found, stop looping
 				return false;
 			}
 		}
 		return true;
 	}
+	
 }
